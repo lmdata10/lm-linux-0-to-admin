@@ -1,0 +1,69 @@
+## My Takeaways
+
+**How to create a user?**
+
+```bash
+
+useradd <user_name>
+
+useradd -g ‹group_name› -s /bin/bash -c "description" -m -d /home/<user name> ‹user name>
+
+# -g add user to an existing group
+# -s shell type you want for the user
+# -c add a comment
+# -m is if you need a home directory or not
+# -d if the -m is used then specify the location of the directory
+```
+
+**How to delete a user?**
+
+```bash
+
+userdel <name_of_user>
+userdel -r <name_of_user>           # -r remove home directory
+userdel -f <name_of_user>           # -f force delete even if the user is logged in
+```
+
+**How to modify a user?**
+
+```bash
+usermod -G <group_name> <user_name>   # -G add user to new group, default group remains the same
+usermod -g ‹group_name> ‹user_name>   # -g  to change default group
+```
+
+**Other usermod options:**
+-m -d /home/newfolder <user_name>  # to move the content of home folder to this new folder
+-p                                 # can use passwd command also
+-s                                 # shell type
+-L -U                              # Lock/Unlock a user
+
+
+### `useradd -r` (System Account)
+
+Used for services (like Apache, Nginx, or your `webapp`).
+
+* **UID Range:** Assigns a low User ID (typically 1–999).
+* **No Expiry:** The account never expires.
+* **No Home:** By default, it does **not** create a home directory (`/home/user`).
+* **Usage:** `sudo useradd -r webapp`
+
+### `useradd -m` (Create Home)
+
+Used for human users who need to store files and log in.
+
+* **Home Directory:** Forces the creation of `/home/user`.
+* **Skeleton Files:** Copies default configuration files (like `.bashrc`) from `/etc/skel` into the new home folder.
+* **Usage:** `sudo useradd -m johndoe`
+
+---
+
+### Key Difference Summary
+
+| Feature | `-r` (System) | `-m` (Home) |
+| --- | --- | --- |
+| **User ID (UID)** | Low (0-999) | Standard (1000+) |
+| **Home Folder** | No (usually) | Yes |
+| **Login Shell** | Often disabled | Enabled |
+| **Primary Goal** | Security/Services | Human Interaction |
+
+**Note:** You *can* combine them (`useradd -r -m`) if you have a service that specifically requires its own home folder to store configs or data.
